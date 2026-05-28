@@ -1,0 +1,126 @@
+-- Demo seed data for local testing
+-- Inserts one ingestion job and a few emission_records for the demo tenant
+-- Run this in Supabase SQL editor (or via supabase CLI) after ensuring tenant exists.
+
+-- Demo job
+INSERT INTO ingestion_jobs (id, tenant_id, source_type, file_name, status, total_rows, parsed_rows, failed_rows, error_details, uploaded_by, created_at, completed_at)
+VALUES (
+  '11111111-1111-1111-1111-111111111111',
+  '00000000-0000-0000-0000-000000000001',
+  'sap',
+  'sample_sap.csv',
+  'completed',
+  4,
+  4,
+  0,
+  '[]'::jsonb,
+  NULL,
+  now(),
+  now()
+) ON CONFLICT (id) DO NOTHING;
+
+-- Demo emission records (4 rows)
+INSERT INTO emission_records (
+  id, tenant_id, job_id, source_type, scope, category, period_start, period_end, plant_code, cost_center, material_number, vendor, raw_quantity, raw_unit, raw_date, normalized_quantity, normalized_unit, emission_factor_kgco2e, co2e_kg, status, flags, raw_row, created_at
+) VALUES
+(
+  '22222222-2222-2222-2222-222222222222',
+  '00000000-0000-0000-0000-000000000001',
+  '11111111-1111-1111-1111-111111111111',
+  'sap',
+  1,
+  'diesel',
+  '2024-01-01',
+  '2024-01-31',
+  'PLANT_DE01',
+  'CC-4100',
+  'MAT-DIESEL-01',
+  'Shell GmbH',
+  1200,
+  'L',
+  '2024-01-15',
+  1200,
+  'L',
+  NULL,
+  NULL,
+  'pending',
+  '[]'::jsonb,
+  ('{"Plant":"PLANT_DE01","Cost Center":"CC-4100","Material Number":"MAT-DIESEL-01","Vendor":"Shell GmbH","Quantity":1200,"Unit":"L","Posting Date":"2024-01-15"}')::jsonb,
+  now()
+),
+(
+  '22222222-3333-4444-5555-666666666666',
+  '00000000-0000-0000-0000-000000000001',
+  '11111111-1111-1111-1111-111111111111',
+  'sap',
+  1,
+  'petrol',
+  '2024-01-01',
+  '2024-01-31',
+  'PLANT_DE01',
+  'CC-4100',
+  'MAT-PETROL-02',
+  'BP AG',
+  800,
+  'L',
+  '2024-01-22',
+  800,
+  'L',
+  NULL,
+  NULL,
+  'pending',
+  '[]'::jsonb,
+  ('{"Plant":"PLANT_DE01","Cost Center":"CC-4100","Material Number":"MAT-PETROL-02","Vendor":"BP AG","Quantity":800,"Unit":"L","Posting Date":"2024-01-22"}')::jsonb,
+  now()
+),
+(
+  '22222222-7777-8888-9999-aaaaaaaaaaaa',
+  '00000000-0000-0000-0000-000000000001',
+  '11111111-1111-1111-1111-111111111111',
+  'sap',
+  1,
+  'diesel',
+  '2024-01-01',
+  '2024-01-31',
+  'PLANT_US03',
+  'CC-5000',
+  'MAT-DIESEL-01',
+  'Petro Corp',
+  2500,
+  'GAL',
+  '2024-01-28',
+  2500,
+  'GAL',
+  NULL,
+  NULL,
+  'pending',
+  '[]'::jsonb,
+  ('{"Plant":"PLANT_US03","Cost Center":"CC-5000","Material Number":"MAT-DIESEL-01","Vendor":"Petro Corp","Quantity":2500,"Unit":"GAL","Posting Date":"2024-01-28"}')::jsonb,
+  now()
+),
+(
+  '22222222-bbbb-cccc-dddd-eeeeeeeeeeee',
+  '00000000-0000-0000-0000-000000000001',
+  '11111111-1111-1111-1111-111111111111',
+  'sap',
+  1,
+  'lpg',
+  '2024-02-01',
+  '2024-02-28',
+  'PLANT_DE01',
+  'CC-3200',
+  'MAT-LPG-01',
+  'Progas',
+  450,
+  'KG',
+  '2024-02-05',
+  450,
+  'KG',
+  NULL,
+  NULL,
+  'pending',
+  '[]'::jsonb,
+  ('{"Plant":"PLANT_DE01","Cost Center":"CC-3200","Material Number":"MAT-LPG-01","Vendor":"Progas","Quantity":450,"Unit":"KG","Posting Date":"2024-02-05"}')::jsonb,
+  now()
+)
+ON CONFLICT (id) DO NOTHING;
